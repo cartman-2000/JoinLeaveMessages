@@ -5,9 +5,11 @@ namespace JoinLeaveMessages
     public class JoinLeaveMessagesConfig : IRocketPluginConfiguration
     {
         public bool Enable;
+        public bool GroupMessages;
         public void LoadDefaults()
         {
             Enable = true;
+            GroupMessages = false;
         }
     }
 }
