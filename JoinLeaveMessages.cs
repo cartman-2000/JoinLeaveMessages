@@ -52,7 +52,7 @@ namespace JoinLeaveMessages
 
         private void Message(UnturnedPlayer player, bool join)
         {
-            if (Instance.Configuration.Instance.Enable)
+            if (Instance.Configuration.Instance.Enable && !R.Permissions.HasPermission(player, "jlm.vanish"))
             {
                 if ((R.Permissions.HasPermission(player, "jlm.group") || player.IsAdmin) && Instance.Configuration.Instance.GroupMessages)
                 {
