@@ -4,11 +4,18 @@ namespace JoinLeaveMessages
 {
     public class JoinLeaveMessagesConfig : IRocketPluginConfiguration
     {
-        public bool Enable;
+
+        public bool JoinMessageEnable;
+        public bool LeaveMessageEnable;
+        public string JoinMessageColor;
+        public string LeaveMessageColor;
         public bool GroupMessages;
         public void LoadDefaults()
         {
-            Enable = true;
+            JoinMessageEnable = true;
+            LeaveMessageEnable = true;
+            JoinMessageColor = "green";
+            LeaveMessageColor = "green";
             GroupMessages = false;
         }
     }
