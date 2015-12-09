@@ -1,10 +1,12 @@
-﻿using Rocket.API.Collections;
+﻿using Rocket.API;
+using Rocket.API.Collections;
 using Rocket.API.Serialisation;
 using Rocket.Core;
 using Rocket.Core.Plugins;
 using Rocket.Unturned;
 using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
+using SDG.Unturned;
 using System.Linq;
 using UnityEngine;
 
@@ -29,6 +31,7 @@ namespace JoinLeaveMessages
                 LeaveMessageColor = ParseColor(Instance.Configuration.Instance.LeaveMessageColor);
                 U.Events.OnPlayerDisconnected += Events_OnPlayerDisconnected;
             }
+            Instance.Configuration.Save();
         }
 
         protected override void Unload()
@@ -48,7 +51,12 @@ namespace JoinLeaveMessages
                     { "connect_message", "{0} connected to the server." },
                     { "disconnect_message", "{0} disconnected from the server." },
                     { "connect_group_message", "{0}{1} connected to the server." },
-                    { "disconnect_group_message", "{0}{1} disconnected to the server." }
+                    { "disconnect_group_message", "{0}{1} disconnected to the server." },
+
+                    { "connect_message_extended", "{0} [{1}] ({2}) connected to the server." },
+                    { "disconnect_message_extended", "{0} [{1}] ({2}) disconnected from the server." },
+                    { "connect_group_message_extended", "{0}{1} [{2}] ({3}) connected to the server." },
+                    { "disconnect_group_message_extended", "{0}{1} [{2}] ({3}) disconnected to the server." }
                 };
             }
         }
@@ -82,7 +90,11 @@ namespace JoinLeaveMessages
                 case "gold":
                     return new Color(1.0f, 0.843137255f, 0f);
                 default:
-                    return Color.green;
+                    float r;
+                    float g;
+                    float b;
+                    string[] colors = color.Split(',');
+                    return (colors.Length == 3 && float.TryParse(colors[0], out r) && float.TryParse(colors[1], out g) && float.TryParse(colors[2], out b) && r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) ? new Color( r/255, g/255, b/255 ) : Color.green;
             }
         }
 
@@ -103,11 +115,39 @@ namespace JoinLeaveMessages
                 if ((R.Permissions.HasPermission(player, "jlm.group") || player.IsAdmin) && Instance.Configuration.Instance.GroupMessages)
                 {
                     RocketPermissionsGroup group = R.Permissions.GetGroups(player, false).FirstOrDefault();
-                    UnturnedChat.Say(Translate(join ? "connect_group_message" : "disconnect_group_message", group != null ? group.DisplayName + ": " : "", player.CharacterName), join == true ? JoinMessageColor : LeaveMessageColor);
+                    if (!Instance.Configuration.Instance.ExtendedMessages)
+                        UnturnedChat.Say(Translate(join ? "connect_group_message" : "disconnect_group_message", group != null ? group.DisplayName + ": " : "", player.CharacterName), join == true ? JoinMessageColor : LeaveMessageColor);
+                    else
+                    {
+                        foreach (SteamPlayer SDGPlayer in Provider.Players)
+                        {
+                            if (SDGPlayer != null)
+                            {
+                                if (R.Permissions.HasPermission(new RocketPlayer(SDGPlayer.SteamPlayerID.CSteamID.ToString()), "jlm.extended") || SDGPlayer.IsAdmin)
+                                    UnturnedChat.Say(SDGPlayer.SteamPlayerID.CSteamID, Translate( join ? "connect_group_message_extended" : "disconnect_group_message_extended", group != null ? group.DisplayName + ": " : "", player.CharacterName, player.SteamName, player.CSteamID.ToString() ), join == true ? JoinMessageColor : LeaveMessageColor);
+                                else
+                                    UnturnedChat.Say(SDGPlayer.SteamPlayerID.CSteamID, Translate( join ? "connect_group_message" : "disconnect_group_message", group != null ? group.DisplayName + ": " : "", player.CharacterName ), join == true ? JoinMessageColor : LeaveMessageColor);
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    UnturnedChat.Say(Translate(join ? "connect_message" : "disconnect_message", player.CharacterName), join == true ? JoinMessageColor : LeaveMessageColor);
+                    if (!Instance.Configuration.Instance.ExtendedMessages)
+                        UnturnedChat.Say(Translate( join ? "connect_message" : "disconnect_message", player.CharacterName ), join == true ? JoinMessageColor : LeaveMessageColor);
+                    else
+                    {
+                        foreach (SteamPlayer SDGPlayer in Provider.Players)
+                        {
+                            if (SDGPlayer != null)
+                            {
+                                if (R.Permissions.HasPermission(new RocketPlayer(SDGPlayer.SteamPlayerID.CSteamID.ToString()), "jlm.extended") || SDGPlayer.IsAdmin)
+                                    UnturnedChat.Say(SDGPlayer.SteamPlayerID.CSteamID, Translate( join ? "connect_message_extended" : "disconnect_message_extended", player.CharacterName, player.SteamName, player.CSteamID.ToString() ), join == true ? JoinMessageColor : LeaveMessageColor);
+                                else
+                                    UnturnedChat.Say(SDGPlayer.SteamPlayerID.CSteamID, Translate( join ? "connect_message" : "disconnect_message", player.CharacterName ), join == true ? JoinMessageColor : LeaveMessageColor);
+                            }
+                        }
+                    }
                 }
             }
         }
