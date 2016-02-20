@@ -2,6 +2,7 @@
 using Rocket.API.Collections;
 using Rocket.API.Serialisation;
 using Rocket.Core;
+using Rocket.Core.Logging;
 using Rocket.Core.Plugins;
 using Rocket.Unturned;
 using Rocket.Unturned.Chat;
@@ -105,7 +106,10 @@ namespace JoinLeaveMessages
 
         private void Events_OnPlayerDisconnected(UnturnedPlayer player)
         {
-            Message(player, false);
+            if (player != null)
+                Message(player, false);
+            else
+                Logger.LogWarning("Warning: DC message for a player didn't run as the player data was null.");
         }
 
         private void Message(UnturnedPlayer player, bool join)
