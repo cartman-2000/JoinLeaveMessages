@@ -52,12 +52,12 @@ namespace JoinLeaveMessages
                     { "connect_message", "{0} connected to the server." },
                     { "disconnect_message", "{0} disconnected from the server." },
                     { "connect_group_message", "{0}{1} connected to the server." },
-                    { "disconnect_group_message", "{0}{1} disconnected to the server." },
+                    { "disconnect_group_message", "{0}{1} disconnected from the server." },
 
                     { "connect_message_extended", "{0} [{1}] ({2}) connected to the server." },
                     { "disconnect_message_extended", "{0} [{1}] ({2}) disconnected from the server." },
                     { "connect_group_message_extended", "{0}{1} [{2}] ({3}) connected to the server." },
-                    { "disconnect_group_message_extended", "{0}{1} [{2}] ({3}) disconnected to the server." }
+                    { "disconnect_group_message_extended", "{0}{1} [{2}] ({3}) disconnected from the server." }
                 };
             }
         }
