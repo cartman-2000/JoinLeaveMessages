@@ -9,7 +9,7 @@ using Rocket.Unturned.Chat;
 using Rocket.Unturned.Player;
 using SDG.Unturned;
 using System.Linq;
-using UnityEngine;
+using Color = UnityEngine.Color;
 
 namespace JoinLeaveMessages
 {
