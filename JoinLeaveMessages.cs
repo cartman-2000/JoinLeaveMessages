@@ -123,14 +123,14 @@ namespace JoinLeaveMessages
                         UnturnedChat.Say(Translate(join ? "connect_group_message" : "disconnect_group_message", group != null ? group.DisplayName + ": " : "", player.CharacterName), join == true ? JoinMessageColor : LeaveMessageColor);
                     else
                     {
-                        foreach (SteamPlayer SDGPlayer in Provider.Players)
+                        foreach (SteamPlayer SDGPlayer in Provider.clients)
                         {
                             if (SDGPlayer != null)
                             {
-                                if (R.Permissions.HasPermission(new RocketPlayer(SDGPlayer.SteamPlayerID.CSteamID.ToString()), "jlm.extended") || SDGPlayer.IsAdmin)
-                                    UnturnedChat.Say(SDGPlayer.SteamPlayerID.CSteamID, Translate( join ? "connect_group_message_extended" : "disconnect_group_message_extended", group != null ? group.DisplayName + ": " : "", player.CharacterName, player.SteamName, player.CSteamID.ToString() ), join == true ? JoinMessageColor : LeaveMessageColor);
+                                if (R.Permissions.HasPermission(new RocketPlayer(SDGPlayer.playerID.steamID.ToString()), "jlm.extended") || SDGPlayer.isAdmin)
+                                    UnturnedChat.Say(SDGPlayer.playerID.steamID, Translate( join ? "connect_group_message_extended" : "disconnect_group_message_extended", group != null ? group.DisplayName + ": " : "", player.CharacterName, player.SteamName, player.CSteamID.ToString() ), join == true ? JoinMessageColor : LeaveMessageColor);
                                 else
-                                    UnturnedChat.Say(SDGPlayer.SteamPlayerID.CSteamID, Translate( join ? "connect_group_message" : "disconnect_group_message", group != null ? group.DisplayName + ": " : "", player.CharacterName ), join == true ? JoinMessageColor : LeaveMessageColor);
+                                    UnturnedChat.Say(SDGPlayer.playerID.steamID, Translate( join ? "connect_group_message" : "disconnect_group_message", group != null ? group.DisplayName + ": " : "", player.CharacterName ), join == true ? JoinMessageColor : LeaveMessageColor);
                             }
                         }
                     }
@@ -141,14 +141,14 @@ namespace JoinLeaveMessages
                         UnturnedChat.Say(Translate( join ? "connect_message" : "disconnect_message", player.CharacterName ), join == true ? JoinMessageColor : LeaveMessageColor);
                     else
                     {
-                        foreach (SteamPlayer SDGPlayer in Provider.Players)
+                        foreach (SteamPlayer SDGPlayer in Provider.clients)
                         {
                             if (SDGPlayer != null)
                             {
-                                if (R.Permissions.HasPermission(new RocketPlayer(SDGPlayer.SteamPlayerID.CSteamID.ToString()), "jlm.extended") || SDGPlayer.IsAdmin)
-                                    UnturnedChat.Say(SDGPlayer.SteamPlayerID.CSteamID, Translate( join ? "connect_message_extended" : "disconnect_message_extended", player.CharacterName, player.SteamName, player.CSteamID.ToString() ), join == true ? JoinMessageColor : LeaveMessageColor);
+                                if (R.Permissions.HasPermission(new RocketPlayer(SDGPlayer.playerID.steamID.ToString()), "jlm.extended") || SDGPlayer.isAdmin)
+                                    UnturnedChat.Say(SDGPlayer.playerID.steamID, Translate( join ? "connect_message_extended" : "disconnect_message_extended", player.CharacterName, player.SteamName, player.CSteamID.ToString() ), join == true ? JoinMessageColor : LeaveMessageColor);
                                 else
-                                    UnturnedChat.Say(SDGPlayer.SteamPlayerID.CSteamID, Translate( join ? "connect_message" : "disconnect_message", player.CharacterName ), join == true ? JoinMessageColor : LeaveMessageColor);
+                                    UnturnedChat.Say(SDGPlayer.playerID.steamID, Translate( join ? "connect_message" : "disconnect_message", player.CharacterName ), join == true ? JoinMessageColor : LeaveMessageColor);
                             }
                         }
                     }
